@@ -5,4 +5,4 @@ node_modules/
 *.log
 
 # Ignore .env (for sensitive information like API keys)
-.env
+*.env
