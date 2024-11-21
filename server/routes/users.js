@@ -7,7 +7,6 @@ import mongoose from "mongoose";
 import sendEmail from "../nodeMailer.js";
 
 import { User, UnAuthUser } from "../mongoSchemas.js";
-
 import { authFunc, registrationAuth, refreshAuth } from "../authentication.js";
 
 const usersRoutes = express.Router();
@@ -182,22 +181,6 @@ usersRoutes.get(api + "balance", authFunc, async (req, res) => {
   console.log(user.balance);
   return res.status(200).send({ balance: user.balance });
 });
-//     }
-//   );
-// } else {
-//   return res.status(406).json({ message: "Unauthorized" });
-// }
-// });
-
-// const fetchUserFields = async (userId, fields) => {
-//     const queryString = new URLSearchParams({ fields: fields.join(",") }).toString();
-//     const response = await fetch(`http://localhost:5000/user/${userId}?${queryString}`);
-//     const data = await response.json();
-//     console.log(data);
-//   };
-
-//   // Fetch `name` and `email` fields for a specific user
-//   fetchUserFields("1234567890abcdef", ["name", "email"]);
 
 usersRoutes.route(api + ":id", async (req, res) => {
   try {
@@ -246,12 +229,7 @@ usersRoutes.post(api + "transactions", authFunc, async (req, res) => {
     "balance transactions"
   );
   console.log(otherUser);
-  // const userTransaction = {
-  //   from: otherEmail,
-  //   to: otherEmail,
-  //   amount: amount * -1,
-  //   date: Date.now(),
-  // };
+
   const transaction = {
     from: user.email,
     to: otherEmail,

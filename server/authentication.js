@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 
 function authFunc(req, res, next) {
-  console.log("in user auth");
   auth("access-token", process.env.SECRET_KEY_USERS, req, res, next);
 }
 
@@ -26,7 +25,6 @@ function auth(tokenName, tokenKey, req, res, next) {
   try {
     const decoded = jwt.verify(token, tokenKey); // Verify token
     req.user = decoded;
-    console.log("here in authFunc!");
     console.log(decoded); // Attach decoded token to req object
     next(); // Proceed to the next middleware or route handler
   } catch (err) {

@@ -34,7 +34,6 @@ singupRoutes.post(api + "confirmation", registrationAuth, async (req, res) => {
 
   await newUser.save();
   await UnAuthUser.deleteOne({ _id: req.user.userId });
-
   res.status(200).send("ok body!");
 });
 
