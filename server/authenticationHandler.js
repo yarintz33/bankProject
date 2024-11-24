@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 
 function authFunc(req, res, next) {
+  console.log("in authFunc");
   auth("access-token", process.env.SECRET_KEY_USERS, req, res, next);
 }
 
@@ -9,14 +10,13 @@ function registrationAuth(req, res, next) {
 }
 
 function refreshAuth(req, res, next) {
-  auth("refresh_token", process.env.REFRESH_TOKEN, req, res, next);
+  auth("refresh-auth_token", process.env.REFRESH_TOKEN, req, res, next);
 }
 
 function auth(tokenName, tokenKey, req, res, next) {
-  console.log("in auth");
-  console.log(tokenName);
-  const token = req.cookies?.[tokenName]; // Retrieve token from cookies
+  const token = req.cookies?.[tokenName];
   if (!token) {
+    console.log("no access token..");
     return res
       .status(401)
       .json({ message: "Access Denied. No token provided." });
@@ -25,7 +25,6 @@ function auth(tokenName, tokenKey, req, res, next) {
   try {
     const decoded = jwt.verify(token, tokenKey); // Verify token
     req.user = decoded;
-    console.log(decoded); // Attach decoded token to req object
     next(); // Proceed to the next middleware or route handler
   } catch (err) {
     return res.status(403).json({ message: "Invalid Token." });
