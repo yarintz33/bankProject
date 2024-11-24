@@ -1,138 +1,78 @@
-import "./App.css";
-import { useState } from "react";
-import { validateEmail } from "../src/utils";
+import React from "react";
+import Register from "./Register";
+import Login from "./Login";
+import Home from "./Home";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
-const PasswordErrorMessage = () => {
-  return (
-    <p className="FieldError">Password should have at least 8 characters</p>
-  );
-};
+export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // const navigate = useNavigate();
 
-function App() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("role");
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/1/verify-token",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
 
-  const getIsFormValid = () => {
-    return (
-      firstName &&
-      validateEmail(email) &&
-      password.length >= 8 &&
-      role !== "role"
-    );
-  };
-
-  const clearForm = () => {
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPassword("");
-    setRole("role");
-  };
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-
-    let newUser = {
-      email: email,
-      firstName: firstName,
-      lastName: lastName,
-      password: password,
+        if (response.ok) {
+          console.log("authenthication succeed!");
+          if (isAuthenticated === false) setIsAuthenticated(true);
+          //navigate("/");
+        } else {
+          console.log("not autharized!");
+          if (isAuthenticated == true) {
+            setIsAuthenticated(false);
+          }
+        }
+      } catch (error) {
+        console.error("Error verifying auth:", error);
+        setIsAuthenticated(false);
+      }
     };
 
-    console.log(newUser);
-    await fetch("http://localhost:5000/api/users/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newUser),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        //const userId = data.insertedId;
-        console.log(data);
-      })
-      .catch((error) => {
-        //window.alert(error);
-        return;
-      });
+    checkAuth();
+  }, []);
 
-    clearForm();
+  if (isAuthenticated === null) {
+    return <div>Loading...</div>;
   }
 
   return (
-    <div className="App">
-      <form onSubmit={handleSubmit}>
-        <fieldset>
-          <h2>Sign Up</h2>
-          <div className="Field">
-            <label>
-              First name <sup>*</sup>
-            </label>
-            <input
-              value={firstName}
-              onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
-              placeholder="First name"
-            />
-          </div>
-          <div className="Field">
-            <label>Last name</label>
-            <input
-              value={lastName}
-              onChange={(e) => {
-                setLastName(e.target.value);
-              }}
-              placeholder="Last name"
-            />
-          </div>
-          <div className="Field">
-            <label>
-              Email address <sup>*</sup>
-            </label>
-            <input
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              placeholder="Email address"
-            />
-          </div>
-          <div className="Field">
-            <label>
-              Password <sup>*</sup>
-            </label>
-            <input
-              value={password}
-              type="password"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              placeholder="Password"
-            />
-            {password.length < 8 ? <PasswordErrorMessage /> : null}
-          </div>
-          <div className="Field">
-            <label>
-              Role <sup>*</sup>
-            </label>
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="role">Role</option>
-              <option value="individual">Individual</option>
-              <option value="business">Business</option>
-            </select>
-          </div>
-          <button type="submit" disabled={!getIsFormValid()}>
-            Create account
-          </button>
-        </fieldset>
-      </form>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? (
+              <Home />
+            ) : (
+              <Login setIsAuthenticated={setIsAuthenticated} />
+            )
+          }
+        />
+        <Route
+          path="/login"
+          element={<Login setIsAuthenticated={setIsAuthenticated} />}
+        />
+        <Route path="/register" element={<Register />}></Route>
+      </Routes>
+      {
+        // <Routes>
+        //   <Route path="/" element={<Layout />}>
+        //     <Route index element={<Home />} />
+        //     <Route path="blogs" element={<Blogs />} />
+        //     <Route path="contact" element={<Contact />} />
+        //     <Route path="*" element={<NoPage />} />
+        //   </Route>
+        // </Routes>
+      }
+    </BrowserRouter>
   );
 }
-
-export default App;
