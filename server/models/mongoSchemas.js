@@ -22,8 +22,20 @@ const userSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   password: { type: String, required: true },
   //phone: { type: String, required: true },
-  transactions: { type: [], required: false },
+  transactions: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "transactions",
+    },
+  ],
   balance: { type: Number, required: false },
+  refreshTokens: [
+    {
+      token: String,
+      createdAt: { type: Date, default: Date.now },
+      expiresAt: Date,
+    },
+  ],
 });
 
 const unAuthUserSchema = new mongoose.Schema({

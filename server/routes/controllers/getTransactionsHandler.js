@@ -1,10 +1,12 @@
-import { Transaction, User } from "../../mongoSchemas.js";
+import { Transaction, User } from "../../models/mongoSchemas.js";
 
 const getTransactions = async (req, res) => {
-  const user = await User.findById(req.user.userId, "transactions").exec();
-  const transactions = await Transaction.find({
-    _id: { $in: user.transactions },
-  });
+  const user = await User.findById(req.user.userId)
+    .select("transactions")
+    .populate("transactions")
+    .exec();
+
+  const transactions = user.transactions;
   return res.status(200).send({ transactions: transactions });
 };
 

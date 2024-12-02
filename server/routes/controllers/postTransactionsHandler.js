@@ -1,4 +1,4 @@
-import { User, Transaction } from "../../mongoSchemas.js";
+import { User, Transaction } from "../../models/mongoSchemas.js";
 import mongoose from "mongoose";
 
 const postTransactions = async (req, res, next) => {
@@ -20,7 +20,6 @@ const postTransactions = async (req, res, next) => {
   });
   const newBalance = user.balance - amount;
   const otherBalance = otherUser.balance + amount;
-  console.log(otherBalance);
   const session = await mongoose.startSession(); // Start a session
   session.startTransaction(); // Start a transaction
 

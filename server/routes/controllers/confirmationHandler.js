@@ -1,5 +1,6 @@
-import { User, UnAuthUser } from "../../mongoSchemas.js";
+import { User, UnAuthUser } from "../../models/mongoSchemas.js";
 import jwt from "jsonwebtoken";
+import { API_BASE_PATH } from "../../config/apiConfig.js";
 
 export default async function confirmation(req, res) {
   console.log("here in confirmation");
@@ -21,23 +22,24 @@ export default async function confirmation(req, res) {
 
   await newUser.save();
   await UnAuthUser.deleteOne({ _id: req.user.userId });
-  console.log(newUser);
-  const accessToken = jwt.sign(
-    {
-      userId: newUser._id,
-      email: email,
-    },
-    process.env.SECRET_KEY_USERS,
-    {
-      expiresIn: "5h",
-    }
-  );
-  res.cookie("access-token", accessToken, {
-    httpOnly: true,
-    sameSite: "Strict", //"None"?q
-    secure: true,
-    //path: "/",
-    maxAge: 60 * 60 * 5 * 1000, // 5 hours
-  });
+  // const accessToken = jwt.sign(
+  //   {
+  //     userId: newUser._id,
+  //     email: email,
+  //   },
+  //   process.env.SECRET_KEY_USERS,
+  //   {
+  //     expiresIn: "5m",
+  //   }
+  // );
+
+  // res.cookie("access-token", accessToken, {
+  //   httpOnly: true,
+  //   sameSite: "Strict", //"None"?q
+  //   secure: true,
+  //   //path: "/",
+  //   maxAge: 60 * 1000, // 1 min
+  // });
+
   res.status(200).send("ok body!");
 }
