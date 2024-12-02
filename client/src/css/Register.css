@@ -4,6 +4,7 @@
   height: 100vh;
   justify-content: center;
   align-items: center;
+
 }
 
 fieldset {
@@ -75,4 +76,49 @@ button[disabled] {
   background-color: #cccccc;
   color: #666666;
   cursor: not-allowed;
+}
+
+.verification-modal {
+  text-align: center;
+}
+
+.verification-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.resend-button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.resend-button:hover:not(:disabled) {
+  background-color: #5a6268;
+}
+
+.resend-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.verification-modal input {
+  margin-bottom: 15px;
+  padding: 8px;
+  width: 200px;
+  text-align: center;
+  font-size: 1.2em;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+}
+
+.verification-modal input:focus {
+  border-color: #007bff;
+  outline: none;
 }

@@ -1,34 +1,36 @@
 import { useEffect, useState } from "react";
 import './css/Transactions.css';
-
+import api from './services/api';
 
 
 const TransactionList = () => {
     
     useEffect(() => {
 
-        async function getTransactions() {
-    
-            const result = await fetch("http://localhost:5000/api/1/users/transactions", {
-              method: "GET",
-              credentials : 'include',
-            }).then((response) => response.json())
-             .then((data) => {
-                console.log(data);
-                const transactions = data["transactions"];
-                transactions.map(transaction => {
-                    transaction["date"] = (new Date(Date.parse(transaction.createdAt)).toGMTString());
-                    transaction.expanded = false;
-                })
-                setTransactions(data["transactions"]);
-            })
-              .catch((error) => {
-                window.alert(error);
-                return;
-              });
-          }
+      async function getTrans() {
+        const fetchTransactions = async () => {
+          return await api.get('/users/transactions');
+        };
+      
+        let response = await fetchTransactions();
+        console.log(response);
+        
+        if (response.status === 401) {
+          throw new Error("Unauthorized, even after token refresh");
+        }
+      
+        // Process the final response
+        const data = response["data"];
+        const transactions = data["transactions"];
+        transactions.map(transaction => {
+          transaction["date"] = (new Date(Date.parse(transaction.createdAt)).toGMTString());
+          transaction.expanded = false;
+        })
+        setTransactions(data["transactions"]);
+      }
+      
 
-        getTransactions();
+        getTrans();
         
       }, []);
 
