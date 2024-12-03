@@ -8,7 +8,6 @@ const getUserInfo = async (req, res) => {
   // const transactions = await Transaction.find({
   //   _id: { $in: user.transactions },
   // });
-  console.log(user);
   return res.status(200).send({
     transactions: user.transactions,
     firstName: user.firstName,

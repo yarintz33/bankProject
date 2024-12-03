@@ -58,7 +58,6 @@ function auth(tokenName, tokenKey, req, res) {
   try {
     const decoded = jwt.verify(token, tokenKey); // Verify token
     req.user = decoded;
-    console.log(decoded);
     return true;
   } catch (err) {
     console.log("failed decode 403");

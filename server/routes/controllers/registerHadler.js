@@ -42,9 +42,9 @@ const register = async (req, res, next) => {
     //return next(err);
     return res.status(400).send({ message: "email already exist in db!" });
   }
-  let registration_token;
+
   try {
-    registration_token = jwt.sign(
+    let registration_token = jwt.sign(
       {
         userId: unAuthUser.id,
         email: unAuthUser.email,
@@ -52,19 +52,21 @@ const register = async (req, res, next) => {
       process.env.REGISTRATION_KEY,
       { expiresIn: "5m" }
     );
+
+    res.cookie("registration_token", registration_token, {
+      httpOnly: true,
+      sameSite: "Strict",
+      secure: true,
+      path: API_BASE_PATH + "registeration/",
+      maxAge: 60 * 5 * 1000, // 5 minutes
+    });
+
+    sendEmail("yarintz33@gmail.com", code); //sendEmail(email, code);
   } catch (err) {
     console.log(err);
     return next(err);
   }
 
-  res.cookie("registration_token", registration_token, {
-    httpOnly: true,
-    sameSite: "Strict",
-    secure: true,
-    path: API_BASE_PATH + "registeration/",
-    maxAge: 60 * 5 * 1000, // 5 minutes
-  });
-  sendEmail("yarintz33@gmail.com", code);
   res
     .status(200)
     .json({

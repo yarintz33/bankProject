@@ -4,7 +4,7 @@ function Str_Random(length) {
 
   // Loop to generate characters for the specified length
   for (let i = 0; i < length; i++) {
-    const randomInd = Math.floor(Math.random() * characters.length);
+    const randomInd = Math.floor(Math.random() * 10);
     result += characters.charAt(randomInd);
   }
   return result;

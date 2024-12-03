@@ -29,16 +29,20 @@ const postTransactions = async (req, res, next) => {
     // Update the first user's transactions
     await User.updateOne(
       { _id: user._id },
-      { $push: { transactions: transaction._id } },
-      { $set: { balance: newBalance } },
+      {
+        $push: { transactions: transaction._id },
+        $set: { balance: newBalance },
+      },
       { session }
     );
 
     // Update the second user's transactions
     await User.updateOne(
       { _id: otherUser._id },
-      { $push: { transactions: transaction._id } },
-      { $set: { balance: otherBalance } },
+      {
+        $push: { transactions: transaction._id },
+        $set: { balance: otherBalance },
+      },
       { session }
     );
 
