@@ -3,6 +3,9 @@ import { useState } from "react";
 import { validateEmail } from "../utils";
 import { useNavigate, Link } from "react-router-dom";
 import Modal from './Modal';
+import api from "../services/api";
+import React from 'react';
+import styles from '../css/LoginRegister.module.css';
 
 const PasswordErrorMessage = () => {
   return (
@@ -48,19 +51,12 @@ function Register() {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/1/users/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include',
-        body: JSON.stringify(newUser),
-      });
-      
-      if (response.ok) {
+      const response = await api.post('/users', JSON.stringify(newUser));
+  
+      if (response.status === 200) {
         setIsModalOpen(true);
       }
-    } catch(error) {
+    } catch(error) { 
       window.alert(error);  
       return;
     }
@@ -71,14 +67,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/api/1/registeration/confirmation', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ code }),
-      });
+      const response = await api.post('/registeration/confirmation', JSON.stringify({ code }));
 
       if (response.ok) {
         setIsModalOpen(false);
@@ -117,106 +106,69 @@ function Register() {
   };
 
   return (
-    <div className="App">
-      <form onSubmit={handleSubmit}>
-        <fieldset>
-          <h2>Sign Up</h2>
-          <div className="Field">
-            <label>
-              First name <sup>*</sup>
-            </label>
-            <input
-              value={firstName}
-              onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
-              placeholder="First name"
-            />
-          </div>
-          <div className="Field">
-            <label>Last name</label>
-            <input
-              value={lastName}
-              onChange={(e) => {
-                setLastName(e.target.value);
-              }}
-              placeholder="Last name"
-            />
-          </div>
-          <div className="Field">
-            <label>
-              Email address <sup>*</sup>
-            </label>
-            <input
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              placeholder="Email address"
-            />
-          </div>
-          <div className="Field">
-            <label>
-              Password <sup>*</sup>
-            </label>
-            <input
-              value={password}
-              type="password"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              placeholder="Password"
-            />
-            {password.length < 8 ? <PasswordErrorMessage /> : null}
-          </div>
+    <div className={styles.background}>
+      <div className={styles.formContainer}>
+        <form onSubmit={handleSubmit}>
+          <fieldset>
+            <h2>Sign Up</h2>
+            <div className="Field">
+              <label>
+                First name <sup>*</sup>
+              </label>
+              <input
+                value={firstName}
+                onChange={(e) => {
+                  setFirstName(e.target.value);
+                }}
+                placeholder="First name"
+              />
+            </div>
+            <div className="Field">
+              <label>Last name</label>
+              <input
+                value={lastName}
+                onChange={(e) => {
+                  setLastName(e.target.value);
+                }}
+                placeholder="Last name"
+              />
+            </div>
+            <div className="Field">
+              <label>
+                Email address <sup>*</sup>
+              </label>
+              <input
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                placeholder="Email address"
+              />
+            </div>
+            <div className="Field">
+              <label>
+                Password <sup>*</sup>
+              </label>
+              <input
+                value={password}
+                type="password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                placeholder="Password"
+              />
+              {password.length < 8 ? <PasswordErrorMessage /> : null}
+            </div>
 
-          <button type="submit" disabled={!getIsFormValid()}>
-            Create account
-          </button>
-          <p>
+            <button type="submit" disabled={!getIsFormValid()}>
+              Create account
+            </button>
+            <p>
         Already have an account? <Link to="/login">Sign in here</Link>
       </p>
-        </fieldset>
-      </form>
-
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className="verification-modal">
-          <h2>Email Verification</h2>
-          <p>Please enter the verification code sent to your email</p>
-          <form onSubmit={handleCodeSubmit}>
-            <input
-              type="text"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              placeholder="Enter code"
-              maxLength="6"
-            />
-            <div className="verification-buttons">
-              <button type="submit">Verify</button>
-              <button 
-                type="button" 
-                onClick={handleResendCode} 
-                disabled={isResending}
-              >
-                {isResending ? 'Resending...' : 'Resend Code'}
-              </button>
-            </div>
-          </form>
-        </div>
-      </Modal>
-
-      <Modal isOpen={isSuccessModalOpen} onClose={() => {
-        setIsSuccessModalOpen(false);
-        navigate('/login');
-      }}>
-        <div className="success-modal">
-          <h2>Registration Completed!</h2>
-          <p>Your account has been successfully verified.</p>
-          <Link to="/login" className="login-link">
-            Go to Login Page
-          </Link>
-        </div>
-      </Modal>
+          </fieldset>
+        </form>
+      </div>
     </div>
   );
 }

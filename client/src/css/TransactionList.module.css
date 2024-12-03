@@ -1,8 +1,9 @@
 .transactionList {
-  background-color: white;
+  background-color: rgb(225, 243, 255);
   border-radius: 15px;
   padding: 20px;
   color: #333;
+  margin-right: 50px; 
 }
 
 .header {
@@ -27,8 +28,9 @@
 .transactionsContainer {
   max-height: 320px;
   overflow-y: auto;
+  
   scrollbar-width: thin;
-  scrollbar-color: #888 #f1f1f1;
+  scrollbar-color: #333 #f1f1f1;
 }
 
 .transactionsContainer::-webkit-scrollbar {
@@ -51,7 +53,8 @@
 
 .transaction {
   padding: 15px;
-  border-bottom: 1px solid #eee;
+      border-radius: 10px;
+  border-bottom: 1px solid #888;
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -84,7 +87,7 @@
 }
 
 .value {
-  color: #666;
+  color: #333;
   margin-left: 5px;
 }
 

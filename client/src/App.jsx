@@ -30,7 +30,6 @@ export default function App() {
   useEffect(() => {
     let isMounted = true; // Add this flag
 
-    console.log("check auth in use effect...");
 
     const checkAuth = async () => {
       try {

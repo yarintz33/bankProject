@@ -20,13 +20,6 @@ async function refreshToken() {
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
-// const waitFunction = async (time) => {
-//   await delay(time);
-//   console.log("Waited");
-//   await delay(1000);
-// };
-
-// Request interceptor
 api.interceptors.request.use(
   (config) => {
     return config;
@@ -36,7 +29,6 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor
 api.interceptors.response.use(
   (response) => {
     return response;
@@ -50,7 +42,6 @@ api.interceptors.response.use(
         console.log("unauthorized, attempting to refresh token...");
 
         const refreshResponse = await api.post("/refresh");
-        console.log(refreshResponse);
         if (refreshResponse.status == 200) {
           return api(originalRequest);
         } else {

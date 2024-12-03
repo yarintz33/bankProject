@@ -4,21 +4,23 @@ import { useNavigate } from "react-router-dom";
 import TransactionList from "./Transactions.jsx";
 import api from '../services/api.js';
 import LoadingSpinner from './LoadingSpinner';
+import TransferModal from './TransferModal';
+import background from '../css/LoginRegister.module.css';
+
 
 function Home() {
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
-  //const userEmail = localStorage.getItem("email");
   const [firstName, setFirstName] = useState("");
   const [balance, setBalance] = useState(0);
+  const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
         const response = await api.get('/users/user-info');
         const data = response.data;
-        console.log(data);
         const processedTransactions = data.transactions.map(transaction => ({
           ...transaction,
           date: new Date(Date.parse(transaction.createdAt)).toGMTString(),
@@ -47,12 +49,34 @@ function Home() {
     }
   };
 
+  const handleTransferSuccess = async () => {
+    try {
+      const response = await api.get('/users/user-info');
+      const data = response.data;
+      const processedTransactions = data.transactions.map(transaction => ({
+        ...transaction,
+        date: new Date(Date.parse(transaction.createdAt)).toGMTString(),
+        expanded: false
+      }));
+      setTransactions(processedTransactions);
+      setBalance(data.balance);
+    } catch (error) {
+      console.error('Failed to refresh data:', error);
+    }
+  };
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
   return (
-    <div className={styles.container}>
+    <div className={ styles.container}>
+      <div className={styles.centerText}>
+        <h1 className={styles.bankTitle}>
+          <span className={styles.bank}>MO Bank</span>
+        </h1>
+      </div>
+
       <header className={styles.header}>
         <div className={styles.greeting}>
           <h1>Hi, {firstName}</h1>
@@ -68,7 +92,10 @@ function Home() {
       </section>
 
       <section className={styles.actions}>
-        <button className={styles.actionButton}>
+        <button 
+          className={styles.actionButton}
+          onClick={() => setIsTransferModalOpen(true)}
+        >
           <span className={styles.actionIcon}>↔</span>
           <span>Transfer</span>
         </button>
@@ -87,6 +114,12 @@ function Home() {
       </section>
 
       <TransactionList transactions={transactions} />
+
+      <TransferModal
+        isOpen={isTransferModalOpen}
+        onClose={() => setIsTransferModalOpen(false)}
+        onTransferSuccess={handleTransferSuccess}
+      />
     </div>
   );
 }

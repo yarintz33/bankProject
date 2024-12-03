@@ -1,5 +1,7 @@
 import { useNavigate, Link } from "react-router-dom";
 import "../css/Login.css";
+import React from 'react';
+import styles from '../css/LoginRegister.module.css';
 
 import { useState } from "react";
 import api from '../services/api';
@@ -37,9 +39,8 @@ function Login({ setIsAuthenticated }) {
   }
 
   return (
-    
-    <div className="App">
-      <div className="form-container">
+    <div className={styles.background}>
+      <div className={styles.formContainer}>
         <form onSubmit={handleSubmit}>
           <fieldset>
             <h2>Sign In</h2>
@@ -77,7 +78,6 @@ function Login({ setIsAuthenticated }) {
         </form>
       </div>
     </div>
-
   );
 }
 
