@@ -6,6 +6,12 @@ import api from '../services/api.js';
 import LoadingSpinner from './LoadingSpinner';
 import TransferModal from './TransferModal';
 import background from '../css/LoginRegister.module.css';
+import Button from '@mui/material/Button';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import DownloadIcon from '@mui/icons-material/Download';
+import PaymentsIcon from '@mui/icons-material/Payments';
+import EmailIcon from '@mui/icons-material/Email';
+import DepositModal from './DepositModal';
 
 
 function Home() {
@@ -14,6 +20,7 @@ function Home() {
   const [firstName, setFirstName] = useState("");
   const [balance, setBalance] = useState(0);
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,6 +72,16 @@ function Home() {
     }
   };
 
+  const handleDepositSuccess = async () => {
+    try {
+      const response = await api.get('/users/balance');
+      const data = response.data;
+      setBalance(data.balance);
+    } catch (error) {
+      console.error('Failed to refresh balance:', error);
+    }
+  };
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -92,25 +109,36 @@ function Home() {
       </section>
 
       <section className={styles.actions}>
-        <button 
-          className={styles.actionButton}
+        <Button
+          variant="contained"
+          startIcon={<SwapHorizIcon />}
           onClick={() => setIsTransferModalOpen(true)}
+          sx={{ margin: '5px' }}
         >
-          <span className={styles.actionIcon}>↔</span>
-          <span>Transfer</span>
-        </button>
-        <button className={styles.actionButton}>
-          <span className={styles.actionIcon}>↓</span>
-          <span>Deposit</span>
-        </button>
-        <button className={styles.actionButton}>
-          <span className={styles.actionIcon}>$</span>
-          <span>Pay</span>
-        </button>
-        <button className={styles.actionButton}>
-          <span className={styles.actionIcon}>✉</span>
-          <span>Message</span>
-        </button>
+          Transfer
+        </Button>
+        <Button
+          variant="contained"
+          startIcon={<DownloadIcon />}
+          sx={{ margin: '5px' }}
+          onClick={() => setIsDepositModalOpen(true)}
+        >
+          Deposit
+        </Button>
+        <Button
+          variant="contained"
+          startIcon={<PaymentsIcon />}
+          sx={{ margin: '5px' }}
+        >
+          Message
+        </Button>
+        <Button
+          variant="contained"
+          startIcon={<EmailIcon />}
+          sx={{ margin: '5px' }}
+        >
+          Delete Account
+        </Button>
       </section>
 
       <TransactionList transactions={transactions} />
@@ -119,6 +147,12 @@ function Home() {
         isOpen={isTransferModalOpen}
         onClose={() => setIsTransferModalOpen(false)}
         onTransferSuccess={handleTransferSuccess}
+      />
+
+      <DepositModal
+        isOpen={isDepositModalOpen}
+        onClose={() => setIsDepositModalOpen(false)}
+        onDepositSuccess={handleDepositSuccess}
       />
     </div>
   );

@@ -6,6 +6,7 @@ import Modal from './Modal';
 import api from "../services/api";
 import React from 'react';
 import styles from '../css/LoginRegister.module.css';
+import VerificationModal from "./VerificationModal";
 
 const PasswordErrorMessage = () => {
   return (
@@ -63,23 +64,23 @@ function Register() {
     clearForm();
   }
 
-  const handleCodeSubmit = async (e) => {
-    e.preventDefault();
+  // const handleCodeSubmit = async (e) => {
+  //   e.preventDefault();
 
-    try {
-      const response = await api.post('/registeration/confirmation', JSON.stringify({ code }));
+  //   try {
+  //     const response = await api.post('/registeration/confirmation', JSON.stringify({ code }));
 
-      if (response.ok) {
-        setIsModalOpen(false);
-        setIsSuccessModalOpen(true);
-      } else {
-        alert('Invalid verification code');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Something went wrong');
-    }
-  };
+  //     if (response.ok) {
+  //       setIsModalOpen(false);
+  //       setIsSuccessModalOpen(true);
+  //     } else {
+  //       alert('Invalid verification code');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //     alert('Something went wrong');
+  //   }
+  // };
 
   const handleResendCode = async () => {
     setIsResending(true);
@@ -168,6 +169,18 @@ function Register() {
       </p>
           </fieldset>
         </form>
+        <VerificationModal
+        isOpen={isModalOpen}
+        onClose={() => {
+            setIsModalOpen(false)
+            alert('Account created successfully');
+            navigate('/login');
+          }
+        }//onVerify={handleVerify}
+        onResend={handleResendCode}
+        title="Verify email"
+        message="Please enter the verification code sent to your email to complete the registration"
+></VerificationModal>
       </div>
     </div>
   );

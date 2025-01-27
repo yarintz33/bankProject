@@ -32,10 +32,9 @@ function Login({ setIsAuthenticated }) {
         navigate("/");
       }
     } catch (error) {
+      alert('Invalid email or password');
       console.error("Login failed:", error);
     }
-
-    clearForm();
   }
 
   return (

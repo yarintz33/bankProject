@@ -1,9 +1,10 @@
 .transactionList {
-  background-color: rgb(225, 243, 255);
+  background-color: rgb(217, 234, 245);
   border-radius: 15px;
   padding: 20px;
   color: #333;
   margin-right: 50px; 
+  margin-left: 50px;
 }
 
 .header {
@@ -88,7 +89,8 @@
 
 .value {
   color: #333;
-  margin-left: 5px;
+font-size: 18px;
+  margin-left: 10px;
 }
 
 .amount {

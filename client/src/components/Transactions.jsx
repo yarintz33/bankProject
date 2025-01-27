@@ -33,8 +33,14 @@ function TransactionList({ transactions }) {
           >
             <div className={styles.transactionInfo}>
               <div className={styles.transactionBasic}>
-                <div className={styles.transactionDate}>
-                  {transaction.date}
+              <div className={styles.transactionDetails}>
+                  <div className={styles.detailRow}>
+                    {transaction.from === userMail ? (
+                      <span className={styles.value}>{transaction.to}</span>
+                    ) : (
+                      <span className={styles.value}>{transaction.from}</span>
+                    )}
+                  </div>
                 </div>
                 <div 
                   className={`${styles.amount} ${transaction.from === userMail ? styles.negative : styles.positive}`}
@@ -45,21 +51,11 @@ function TransactionList({ transactions }) {
               
               {/* Details shown only when expanded */}
               {expandedIds.has(transaction._id) && (
-                <div className={styles.transactionDetails}>
-                  <div className={styles.detailRow}>
-                    {transaction.from === userMail ? (
-                      <>
-                        <span className={styles.label}>to:</span> 
-                        <span className={styles.value}>{transaction.to}</span>
-                      </>
-                    ) : (
-                      <>
-                        <span className={styles.label}>from:</span> 
-                        <span className={styles.value}>{transaction.from}</span>
-                      </>
-                    )}
-                  </div>
-                </div>
+                <div className={styles.transactionDate}>
+                {transaction.date}
+              </div>
+
+                
               )}
             </div>
           </div>

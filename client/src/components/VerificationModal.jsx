@@ -27,15 +27,14 @@ function VerificationModal({
     try {
       const response = await api.post('/registeration/confirmation', JSON.stringify({ code }));
 
-      if (response.ok) {
-        // setIsModalOpen(false);
-        // setIsSuccessModalOpen(true);
+      if (response.status == 200) {
+         onClose();
       } else {
-        alert('Invalid verification code');
+        alert('Invalid verification code!');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Something went wrong');
+      alert('invalid code');
     }
   };
 
@@ -67,7 +66,7 @@ function VerificationModal({
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="verification-modal">
 
-        <h2 style={{ color: 'black' }}>{title + " change the css.."}</h2>
+        <h2 style={{ color: 'black' }}>{title}</h2>
         <p>{message}</p>
         <form onSubmit={handleCodeSubmit}>
           <input

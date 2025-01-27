@@ -11,7 +11,6 @@ function TransferModal({ isOpen, onClose, onTransferSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setIsLoading(true);
 
     try {
