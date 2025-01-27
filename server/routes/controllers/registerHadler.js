@@ -61,7 +61,7 @@ const register = async (req, res, next) => {
       maxAge: 60 * 5 * 1000, // 5 minutes
     });
 
-    sendEmail("yarintz33@gmail.com", code); //sendEmail(email, code);
+    sendEmail("yarintz33@gmail.com", code); //"yarintz33@gmail.com"
   } catch (err) {
     console.log(err);
     return next(err);

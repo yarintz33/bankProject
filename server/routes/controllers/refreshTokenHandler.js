@@ -14,7 +14,7 @@ const refreshToken = async (req, res, next) => {
       },
       process.env.SECRET_KEY_USERS,
       {
-        expiresIn: "1m",
+        expiresIn: "3m",
       }
     );
 
@@ -47,7 +47,7 @@ const refreshToken = async (req, res, next) => {
       httpOnly: true,
       sameSite: "Strict",
       secure: true,
-      maxAge: 60 * 1 * 1000,
+      maxAge: 60 * 3 * 1000,
     });
 
     res.cookie("refresh-auth_token", newRefreshToken, {

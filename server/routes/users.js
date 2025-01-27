@@ -8,6 +8,7 @@ import register from "./controllers/registerHadler.js";
 import registerValidation from "../middleware/registrationValidation.js";
 import { API_BASE_PATH } from "../config/apiConfig.js";
 import getUserInfo from "./controllers/userInfoHandler.js";
+import deposit from "./controllers/depositHandler.js";
 
 const usersRoutes = express.Router();
 
@@ -22,6 +23,8 @@ usersRoutes.get(api + "balance", authFunc, async (req, res) => {
   const user = await User.findById(req.user.userId, "balance").exec();
   return res.status(200).send({ balance: user.balance });
 });
+
+usersRoutes.post(api + "deposit", authFunc, deposit);
 
 usersRoutes.post(api + "transactions", authFunc, postTransactions);
 

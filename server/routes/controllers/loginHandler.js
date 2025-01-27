@@ -13,7 +13,7 @@ const login = async (req, res, next) => {
 
   const valid = await bcrypt.compare(password, user.password);
   if (valid === false) {
-    res.status(406).send("wrong email or password!");
+    res.status(406).send("wrong email or password");
     return;
   }
 
@@ -45,7 +45,7 @@ const login = async (req, res, next) => {
     },
     process.env.SECRET_KEY_USERS,
     {
-      expiresIn: "1m",
+      expiresIn: "3m",
     }
   );
   user["token"] = refreshToken;
@@ -53,16 +53,16 @@ const login = async (req, res, next) => {
 
   res.cookie("refresh-auth_token", refreshToken, {
     httpOnly: true,
-    sameSite: "Strict", //"None"?
+    sameSite: "Strict",
     secure: true,
     path: API_BASE_PATH + "refresh",
     maxAge: 60 * 60 * 3 * 1000, // 3 hour
   });
   res.cookie("access-token", accessToken, {
     httpOnly: true,
-    sameSite: "Lax", //"None"?q
+    sameSite: "Lax",
     secure: true, //change to true in production
-    maxAge: 1000 * 60 * 1, // 1 min
+    maxAge: 1000 * 60 * 3, // 3 min
   });
 
   res.status(200).send({ message: "login successfully!" });

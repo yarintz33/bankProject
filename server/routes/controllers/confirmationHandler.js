@@ -17,32 +17,15 @@ export default async function confirmation(req, res) {
       balance: 0,
     });
 
-    await newUser.save();
-    await UnAuthUser.deleteOne({ _id: req.user.userId });
-    // const accessToken = jwt.sign(
-    //   {
-    //     userId: newUser._id,
-    //     email: email,
-    //   },
-    //   process.env.SECRET_KEY_USERS,
-    //   {
-    //     expiresIn: "5m",
-    //   }
-    // );
-
-    // res.cookie("access-token", accessToken, {
-    //   httpOnly: true,
-    //   sameSite: "Strict", //"None"?q
-    //   secure: true,
-    //   //path: "/",
-    //   maxAge: 60 * 1000, // 1 min
-    // });
-
-    res.status(200).send("ok body!");
+    if (code != bodyCode) {
+      return res.status(406).send("incorrect code");
+    } else {
+      await newUser.save();
+      await UnAuthUser.deleteOne({ _id: req.user.userId });
+      return res.status(200).send("ok body!");
+    }
   } catch (error) {
+    console.log("server error....");
     return res.status(500).send("server error");
-  }
-  if (code != bodyCode) {
-    return res.status(406).send("incorrect code");
   }
 }

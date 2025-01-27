@@ -8,8 +8,7 @@ const refreshCode = async (req, res, next) => {
   await UnAuthUser.findByIdAndUpdate(req.user.userId, {
     $set: { code: code },
   });
-  console.log(email);
-  sendEmail("yarintz33@gmail.com", code); // change to email...
+  sendEmail(email, code); // "yarintz33@gmail.com"
   res.status(200).json({ message: "code sent" });
 };
 

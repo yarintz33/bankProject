@@ -12,6 +12,9 @@ const postTransactions = async (req, res, next) => {
 
   const otherUser = await User.findOne({ email: otherEmail }, "balance");
 
+  if (!otherUser) {
+    return res.status(406).send("user didn't dound");
+  }
   const transaction = new Transaction({
     from: user.email,
     to: otherEmail,
